@@ -45,6 +45,19 @@ var popup_wait = false;
 var talkpopup = false;
 var talkpopup_text = "";
 
+function RectCollision(rect1, rect2) {
+  if (rect1.x < rect2.x + rect2.width &&
+   rect1.x + rect1.width > rect2.x &&
+   rect1.y < rect2.y + rect2.height &&
+   rect1.height + rect1.y > rect2.y) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+var floor = {x: 250, y: 250, width: 300, height: 100};
+
 var Keys = {
   "UP_ARROW": 38,
   "DOWN_ARROW": 40,
@@ -109,7 +122,17 @@ function doAction(actionID) {
         break;
 
         case 2:
-            talkpopup_text = "No Problem here.";
+            var playerRect = {
+                x: spx,
+                y: spy,
+                width: 30,
+                height: 30
+            };
+            if(RectCollision(playerRect, floor)) {
+                talkpopup_text = "For some strange reason\nThere is a black floor outline here";
+            } else {
+                talkpopup_text = "No Problem here.";
+            }
             talkpopup = true;
             popup_wait = true;
         break;
@@ -219,7 +242,13 @@ function draw() {
     cx.font = "14px Consolas";
     cx.fillText("Sprite Counter: " + sprite_counter,5,200);
 
+    //Floor
+    cx.strokeStyle = "black";
+    cx.strokeRect(floor.x, floor.y, floor.width, floor.height);
+
+    //Player
     cx.drawImage(spritesheet, sprite_frame_x, sprite_frame_y,CHAR_WIDTH,CHAR_HEIGHT,spx,spy,30,40);
+
     if(popup) {
 
         //Popup
