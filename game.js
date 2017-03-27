@@ -107,6 +107,34 @@ function keyup(code) {
     }
 }
 
+CanvasRenderingContext2D.prototype.wrapText = function (text, x, y, maxWidth, lineHeight) {
+
+    var lines = text.split("\n");
+
+    for (var i = 0; i < lines.length; i++) {
+
+        var words = lines[i].split(' ');
+        var line = '';
+
+        for (var n = 0; n < words.length; n++) {
+            var testLine = line + words[n] + ' ';
+            var metrics = this.measureText(testLine);
+            var testWidth = metrics.width;
+            if (testWidth > maxWidth && n > 0) {
+                this.fillText(line, x, y);
+                line = words[n] + ' ';
+                y += lineHeight;
+            }
+            else {
+                line = testLine;
+            }
+        }
+
+        this.fillText(line, x, y);
+        y += lineHeight;
+    }
+}
+
 function doAction(actionID) {
     switch(actionID) {
         case 0:
@@ -126,10 +154,10 @@ function doAction(actionID) {
                 x: spx,
                 y: spy,
                 width: 30,
-                height: 30
+                height: 40
             };
             if(RectCollision(playerRect, floor)) {
-                talkpopup_text = "For some strange reason\nThere is a black floor outline here";
+                talkpopup_text = "For some strange reason there is a black floor outline here";
             } else {
                 talkpopup_text = "No Problem here.";
             }
@@ -243,6 +271,7 @@ function draw() {
     cx.fillText("Sprite Counter: " + sprite_counter,5,200);
 
     //Floor
+    cx.lineWidth = 2;
     cx.strokeStyle = "black";
     cx.strokeRect(floor.x, floor.y, floor.width, floor.height);
 
@@ -279,7 +308,8 @@ function draw() {
             //Draw Text
             cx.fillStyle = "white";
             cx.font = "15px Consolas";
-            cx.fillText(talkpopup_text,175 + 10, 10 + 20);
+            //cx.fillText(talkpopup_text,175 + 10, 10 + 20);
+            cx.wrapText(talkpopup_text,175 + 10, 10 + 20,220,25);
 
             
         }
