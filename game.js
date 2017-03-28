@@ -195,16 +195,7 @@ function update() {
 
     //Animate Sprite
     player.update();
-    //player.move();
 
-/*
-    if(popup_cursor_y >= 90) {
-        popup_cursor_y = 20;
-    }
-    else if(popup_cursor_y < 20) {
-        popup_cursor_y = 20 + (30 * 2);
-    }
-*/
 }
 
 function draw() {
@@ -221,47 +212,24 @@ function draw() {
     //cx.strokeRect(floor.x, floor.y, floor.width, floor.height);
 
     //Player
-    //cx.drawImage(spritesheet, sprite_frame_x, sprite_frame_y,CHAR_WIDTH,CHAR_HEIGHT,spx,spy,30,40);
     player.draw();
     
     popup.draw();
 
     /*
-    if(popup) {
-
-        //Popup
+    if(talkpopup) {
+        //Talk Window
         cx.strokeStyle = "grey";
         cx.lineWidth = 3;
         cx.fillStyle = "black";
-        cx.fillRect(5,5,200,100);
-        cx.strokeRect(5,5,200,100);
-
-        //Cursor
-        cx.fillStyle = "orange";
-        cx.fillRect(popup_cursor_x, popup_cursor_y,2,5);
-
-        //Items
+        cx.fillRect(175,10,250,150);
+        cx.strokeRect(175,10,250,150);
+        //Draw Text
         cx.fillStyle = "white";
-        cx.font = "16px Consolas";
-        cx.fillText("Talk to",popup_text_offsetx + 10, popup_text_offsety + 20);
-        cx.fillText("PSI",popup_text_offsetx + 10, popup_text_offsety + 50);
-        cx.fillText("Check",popup_text_offsetx + 10, popup_text_offsety + 80);
-
-        if(talkpopup) {
-            //Talk Window
-            cx.strokeStyle = "grey";
-            cx.lineWidth = 3;
-            cx.fillStyle = "black";
-            cx.fillRect(175,10,250,150);
-            cx.strokeRect(175,10,250,150);
-            //Draw Text
-            cx.fillStyle = "white";
-            cx.font = "15px Consolas";
-            //cx.fillText(talkpopup_text,175 + 10, 10 + 20);
-            cx.wrapText(talkpopup_text,175 + 10, 10 + 20,220,25);
-
-            
-        }
+        cx.font = "15px Consolas";
+        //cx.fillText(talkpopup_text,175 + 10, 10 + 20);
+        cx.wrapText(talkpopup_text,175 + 10, 10 + 20,220,25);     
+    }
 
 
     }
