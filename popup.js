@@ -16,6 +16,8 @@ function Popup(x,y) {
     };
     this.wait = false;
 
+    this.talkwindow = null;
+
     this.draw = function() {
         if(this.visible) {
             //Popup
@@ -38,10 +40,35 @@ function Popup(x,y) {
         }
     }
 
+    this.setTalkWindow = function(tWindow) {
+        this.talkwindow = tWindow;
+    }
+
     this.reset = function() {
         this.visible = false;
         this.cursor.y = 20;
         this.wait = false;
+    }
+
+    this.doAction = function(id) {
+        switch(id) {
+            case 0:
+                this.talkwindow.setText("Who are you talking to?");
+            break;
+
+            case 1:
+                this.talkwindow.setText("You cant use PSI right now");
+            break;
+
+            case 2:
+                if(RectCollision(player,floor)) {
+                    this.talkwindow.setText("For some strange reason there is an outline on the floor");
+                } 
+                else {
+                    this.talkwindow.setText("No Problem here.");
+                }
+            break;
+        }
     }
 
     this.keydown = function(code) {
@@ -50,7 +77,8 @@ function Popup(x,y) {
         if(code == Keys["KEY_Z"]) {
             if(!this.wait) {
                 this.selection = Math.floor(this.cursor.y / 30);
-                console.log("Selection: " + this.selection);
+                //console.log("Selection: " + this.selection);
+                this.doAction(this.selection);
                 this.wait = true;
             } else {
                 this.reset();

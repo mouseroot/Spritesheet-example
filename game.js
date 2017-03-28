@@ -12,17 +12,9 @@ var player;
 //Popup
 var popup;
 
-/*
-var popup = false;
-var popup_text_offsetx = 5;
-var popup_text_offsety = 10;
-var popup_cursor_x = 9;
-var popup_cursor_y = 20;
-var popup_wait = false;
+//TalkWindow
+var talkwindow;
 
-var talkpopup = false;
-var talkpopup_text = "";
-*/
 
 function RectCollision(rect1, rect2) {
   if (rect1.x < rect2.x + rect2.width &&
@@ -58,9 +50,10 @@ function init() {
     },false);
 
     //Create the sprite
-    player = new Sprite(5,200,"spritesheet2.png",72,96,30,40);
-
+    player = new Sprite(250,200,"spritesheet2.png",72,96,30,40);
+    talkwindow = new TalkWindow(175,10);
     popup = new Popup(5,5);
+    popup.setTalkWindow(talkwindow);
 }
 
 function keyup(code) {
@@ -95,89 +88,6 @@ CanvasRenderingContext2D.prototype.wrapText = function (text, x, y, maxWidth, li
     }
 }
 
-function doAction(actionID) {
-    switch(actionID) {
-        case 0:
-            talkpopup_text = "Who are you talking to?";
-            talkpopup = true;
-            popup_wait = true;
-        break;
-
-        case 1:
-            talkpopup_text = "You cant use any PSI now.";
-            talkpopup = true;
-            popup_wait = true;
-        break;
-
-        case 2:
-            var playerRect = {
-                x: spx,
-                y: spy,
-                width: 30,
-                height: 40
-            };
-            if(RectCollision(playerRect, floor)) {
-                talkpopup_text = "For some strange reason there is a black floor outline here";
-            } else {
-                talkpopup_text = "No Problem here.";
-            }
-            talkpopup = true;
-            popup_wait = true;
-        break;
-    }
-}
-
-/*
-function keydown(code) {
-    player.keydown(code);
-
-    
-    if(popup && !talkpopup && !popup_wait) {
-        if(code == Keys["DOWN_ARROW"]) {
-            popup_cursor_y += 30;
-        }
-        else if(code == Keys["UP_ARROW"]) {
-            popup_cursor_y -= 30;
-        }
-    }
-    
-
-    //Menu / Confirm key
-    if(code == Keys["KEY_Z"]) {
-        //Nothing shown
-        if(!popup) {
-            popup = true;
-            isMoving = false;
-            sprite_frame_x = 72;
-
-        }
-
-        //Menu shown and item selected
-        else if(popup && !talkpopup) {
-            var selection = Math.floor(popup_cursor_y / 30);
-            doAction(selection);
-            popup_wait = true;
-        }
-
-        //Menu shown and item selected and waiting
-        else if(popup && talkpopup && popup_wait) {
-            popup = false;
-            popup_wait = false;
-            talkpopup = false;
-            popup_cursor_y = 20;
-        }
-    }
-    //Cancel / Back key
-    if(code == Keys["KEY_X"]) {
-        if(popup) {
-            popup = false;
-            popup_wait = false;
-            talkpopup = false;
-            popup_cursor_y = 20;
-        }
-    }
-}
-*/
 
 function keydown(code) {
     if(!popup.visible) {
@@ -188,6 +98,7 @@ function keydown(code) {
     }
     else {
         popup.keydown(code);
+        talkwindow.keydown(code);
     }
 }
 
@@ -207,33 +118,18 @@ function draw() {
     cx.fillText("Sprite Counter: " + player.framecounter,5,200);
 
     //Floor
-    //cx.lineWidth = 2;
-    //cx.strokeStyle = "black";
-    //cx.strokeRect(floor.x, floor.y, floor.width, floor.height);
+    cx.lineWidth = 2;
+    cx.strokeStyle = "black";
+    cx.strokeRect(floor.x, floor.y, floor.width, floor.height);
 
     //Player
     player.draw();
-    
+
+    //Popup
     popup.draw();
 
-    /*
-    if(talkpopup) {
-        //Talk Window
-        cx.strokeStyle = "grey";
-        cx.lineWidth = 3;
-        cx.fillStyle = "black";
-        cx.fillRect(175,10,250,150);
-        cx.strokeRect(175,10,250,150);
-        //Draw Text
-        cx.fillStyle = "white";
-        cx.font = "15px Consolas";
-        //cx.fillText(talkpopup_text,175 + 10, 10 + 20);
-        cx.wrapText(talkpopup_text,175 + 10, 10 + 20,220,25);     
-    }
-
-
-    }
-    */
+    //TalkWindow
+    talkwindow.draw();
 
     update();
     requestAnimationFrame(draw);
