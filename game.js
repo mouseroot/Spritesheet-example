@@ -6,35 +6,13 @@ var cx = canvas.getContext("2d");
 var width = 640;
 var height = 480;
 
-var spritesheet = new Image();
-    spritesheet.ready = false;
-    spritesheet.onload = function() {
-        this.ready = true;
-    }
-    spritesheet.src = "spritesheet2.png";
+//Sprite
+var player;
 
+//Popup
+var popup;
 
-var CHAR_WIDTH = 72,
-	CHAR_HEIGHT = 96,
-	SPRITE_WIDTH = 216;
-
-var sprite_up_y = 0;
-var sprite_right_y = 96;
-var sprite_down_y = 196;
-var sprite_left_y = 288;
-
-var sprite_frame_x = 0;
-var sprite_frame_y = sprite_down_y;
-var isMoving = false;
-var sprite_fps = 10;
-var sprite_counter = 0;
-
-var spx = 0;
-var spy = 200;
-
-var svx = 0;
-var svy = 0;
-
+/*
 var popup = false;
 var popup_text_offsetx = 5;
 var popup_text_offsety = 10;
@@ -44,6 +22,7 @@ var popup_wait = false;
 
 var talkpopup = false;
 var talkpopup_text = "";
+*/
 
 function RectCollision(rect1, rect2) {
   if (rect1.x < rect2.x + rect2.width &&
@@ -77,34 +56,15 @@ function init() {
     document.addEventListener("keydown", function(e) {
         keydown(e.keyCode);
     },false);
+
+    //Create the sprite
+    player = new Sprite(5,200,"spritesheet2.png",72,96,30,40);
+
+    popup = new Popup(5,5);
 }
 
 function keyup(code) {
-    if(code == Keys["RIGHT_ARROW"]) {
-        svx = 0;
-        svy = 0;
-        sprite_frame_x = 72;
-        isMoving = false;
-    }
-    if(code == Keys["LEFT_ARROW"]) {
-        sprite_frame_x = 72;
-        isMoving = false;
-        svx = 0;
-        svy = 0;
-    }
-
-    if(code == Keys["UP_ARROW"]) {
-        isMoving = false;
-        sprite_frame_x = 72;
-        svx = 0;
-        svy = 0;
-    }
-    if(code == Keys["DOWN_ARROW"]) {
-        isMoving = false;
-        sprite_frame_x = 72;
-        svx = 0;
-        svy = 0;
-    }
+    player.keyup(code);
 }
 
 CanvasRenderingContext2D.prototype.wrapText = function (text, x, y, maxWidth, lineHeight) {
@@ -167,31 +127,12 @@ function doAction(actionID) {
     }
 }
 
+/*
 function keydown(code) {
-    if(!popup) {
-        if(code == Keys["RIGHT_ARROW"]) {
-            svx = 1;
-            isMoving = true;
-            sprite_frame_y = sprite_right_y;
-            
-        }
-        else if(code == Keys["LEFT_ARROW"]) {
-            svx = -1;
-            isMoving = true;
-            sprite_frame_y = sprite_left_y;   
-        }
+    player.keydown(code);
 
-        if(code == Keys["UP_ARROW"]) {
-            svy = -1;
-            isMoving = true;
-            sprite_frame_y = sprite_up_y;
-        }
-        else if(code == Keys["DOWN_ARROW"]) {
-            svy = 1;
-            isMoving = true;
-            sprite_frame_y = sprite_down_y;
-        }
-    } else if(popup && !talkpopup && !popup_wait) {
+    
+    if(popup && !talkpopup && !popup_wait) {
         if(code == Keys["DOWN_ARROW"]) {
             popup_cursor_y += 30;
         }
@@ -199,6 +140,7 @@ function keydown(code) {
             popup_cursor_y -= 30;
         }
     }
+    
 
     //Menu / Confirm key
     if(code == Keys["KEY_Z"]) {
@@ -235,31 +177,34 @@ function keydown(code) {
         }
     }
 }
+*/
+
+function keydown(code) {
+    if(!popup.visible) {
+        player.keydown(code);
+        if(code == Keys["KEY_Z"]) {
+            popup.visible = !popup.visible;
+        }
+    }
+    else {
+        popup.keydown(code);
+    }
+}
 
 function update() {
 
     //Animate Sprite
-    
-    if(sprite_counter >= sprite_fps && isMoving) {
-        sprite_frame_x += CHAR_WIDTH;
-        if (sprite_frame_x >= SPRITE_WIDTH) {
-            sprite_frame_x = 0;
-        }
-        sprite_counter = 0;
-    }
-    if(isMoving) {
-        sprite_counter++;
-        spx = spx += svx;
-        spy = spy += svy;
-    }
+    player.update();
+    //player.move();
 
+/*
     if(popup_cursor_y >= 90) {
         popup_cursor_y = 20;
     }
     else if(popup_cursor_y < 20) {
         popup_cursor_y = 20 + (30 * 2);
     }
-
+*/
 }
 
 function draw() {
@@ -268,16 +213,20 @@ function draw() {
 
     cx.fillStyle = "black";
     cx.font = "14px Consolas";
-    cx.fillText("Sprite Counter: " + sprite_counter,5,200);
+    cx.fillText("Sprite Counter: " + player.framecounter,5,200);
 
     //Floor
-    cx.lineWidth = 2;
-    cx.strokeStyle = "black";
-    cx.strokeRect(floor.x, floor.y, floor.width, floor.height);
+    //cx.lineWidth = 2;
+    //cx.strokeStyle = "black";
+    //cx.strokeRect(floor.x, floor.y, floor.width, floor.height);
 
     //Player
-    cx.drawImage(spritesheet, sprite_frame_x, sprite_frame_y,CHAR_WIDTH,CHAR_HEIGHT,spx,spy,30,40);
+    //cx.drawImage(spritesheet, sprite_frame_x, sprite_frame_y,CHAR_WIDTH,CHAR_HEIGHT,spx,spy,30,40);
+    player.draw();
+    
+    popup.draw();
 
+    /*
     if(popup) {
 
         //Popup
@@ -316,6 +265,7 @@ function draw() {
 
 
     }
+    */
 
     update();
     requestAnimationFrame(draw);
