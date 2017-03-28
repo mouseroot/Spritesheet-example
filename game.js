@@ -113,10 +113,6 @@ function draw() {
     cx.fillStyle = "#555";
     cx.fillRect(0,0,width, height);
 
-    cx.fillStyle = "black";
-    cx.font = "14px Consolas";
-    cx.fillText("Sprite Counter: " + player.framecounter,5,200);
-
     //Floor
     cx.lineWidth = 2;
     cx.strokeStyle = "black";
