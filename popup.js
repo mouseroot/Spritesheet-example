@@ -41,29 +41,38 @@ function Popup(x,y) {
     this.reset = function() {
         this.visible = false;
         this.cursor.y = 20;
+        this.wait = false;
     }
 
     this.keydown = function(code) {
 
         //Confirm on Selection
-        if(code == Keys["KEY_Z"] && this.visible) {
-            this.selection = Math.floor(this.cursor.y / 30);
-            console.log("Selection: " + this.selection);
+        if(code == Keys["KEY_Z"]) {
+            if(!this.wait) {
+                this.selection = Math.floor(this.cursor.y / 30);
+                console.log("Selection: " + this.selection);
+                this.wait = true;
+            } else {
+                this.reset();
+            }
         }
+        //On wait reset
+
         //Cancel
         else if(code == Keys["KEY_X"] && this.visible) {
             this.reset();
 
+
         }
 
-        if(code == Keys["DOWN_ARROW"]) {
+        if(code == Keys["DOWN_ARROW"] && !this.wait) {
             if(this.cursor.y >= 60) {
                 this.cursor.y = this.cursor.starty;
             } else {
                 this.cursor.y += 30;
             }
         }
-        else if(code == Keys["UP_ARROW"]) {
+        else if(code == Keys["UP_ARROW"] && !this.wait) {
             if(this.cursor.y <= this.cursor.starty) {
                 this.cursor.y = 80;
             } else {
