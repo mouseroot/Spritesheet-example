@@ -85,6 +85,8 @@ function Sprite(x, y, imgSrc, frame_width, frame_height, width, height) {
 
     this.draw = function() {
         cx.drawImage(this.image, this.frame_x, this.frame_y,this.frame.width,this.frame.height,this.x,this.y,this.width,this.height);   
+        cx.strokeStyle = "#0E0";
+        cx.strokeRect(this.x, this.y, this.width, this.height);
     }
 
     this.keydown = function(code) {

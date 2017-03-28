@@ -29,7 +29,7 @@ function Popup(x,y) {
 
             //Cursor
             cx.fillStyle = "white";
-            cx.fillRect(this.cursor.x, this.cursor.y,5,5);
+            cx.fillRect(this.cursor.x, this.cursor.y + 3,5,5);
 
             //Items
             cx.fillStyle = "white";
