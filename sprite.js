@@ -1,26 +1,3 @@
-/*
-var CHAR_WIDTH = 72,
-	CHAR_HEIGHT = 96,
-	SPRITE_WIDTH = 216;
-
-var sprite_up_y = 0;
-var sprite_right_y = 96;
-var sprite_down_y = 196;
-var sprite_left_y = 288;
-
-var sprite_frame_x = 0;
-var sprite_frame_y = sprite_down_y;
-var isMoving = false;
-var sprite_fps = 10;
-var sprite_counter = 0;
-
-var spx = 0;
-var spy = 200;
-
-var svx = 0;
-var svy = 0;
-*/
-
 function Sprite(x, y, imgSrc, frame_width, frame_height, width, height) {
     this.frame = {
         width: frame_width,
@@ -52,20 +29,8 @@ function Sprite(x, y, imgSrc, frame_width, frame_height, width, height) {
     }
     this.image.src = imgSrc;
 
-    this.animate = function() {
-
-    }
-
     this.update = function() {
-        /*
-        if(this.framecounter >= this.framerate && this.isMoving) {
-            this.frame_x += this.frame.width;
-            if (this.frame_x >= 216) {
-                this.frame_x = 0;
-            }
-            this.framecounter = 0;
-        }
-        */
+
         if(this.framecounter >= this.fps && this.isMoving) {
             this.frame_x += this.frame.width;
             if (this.frame_x >= 216) {
@@ -77,10 +42,8 @@ function Sprite(x, y, imgSrc, frame_width, frame_height, width, height) {
             this.framecounter++;
             this.x += this.xvel;
             this.y += this.yvel;
-            //console.log("FC:",this.framecounter);
         }
     }
-
 
 
     this.draw = function() {
@@ -135,5 +98,5 @@ function Sprite(x, y, imgSrc, frame_width, frame_height, width, height) {
         if(code == Keys["DOWN_ARROW"]) {
             this.stop();
         }        
-    }
+    }.bind(this);
 }
